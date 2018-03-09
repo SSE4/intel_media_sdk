@@ -1,0 +1,24 @@
+This text file is the file (e.g., redist.txt, etc) specified in the accompanying End User License Agreement for the Intel(R) Software Development Products ("Agreement"). All capitalized terms used but not defined in this text file have the same meaning as specified in the Agreement.
+
+The Redistributables files are listed below, and are subject to all of the terms and conditions of the Agreement, including without limitation Section 3.1.A.(4).   
+
+List of Redistributables:
+
+libmfxaudiosw32.dll
+libmfxaudiosw64.dll
+mfxplugin_camera_pipe32.dll
+mfxplugin_camera_pipe64.dll
+libmfxsw32.dll
+libmfxsw64.dll
+libmfx.lib
+plugin.cfg
+igfx_s3dcontrol.lib
+mfxplugin32_screen_capture.dll
+mfxplugin64_screen_capture.dll
+
+Files provided under a BSD license:
+<InstallationFolder>\opensource\mfx_dispatch\include\*
+<InstallationFolder>\opensource\mfx_dispatch\src\*
+<InstallationFolder>\include\*
+
+* Other names and brands may be claimed as the property of others.

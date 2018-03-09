@@ -1,0 +1,212 @@
+{\rtf1\ansi\ansicpg1251\deff0\nouicompat\deflang1049\deflangfe1049{\fonttbl{\f0\fswiss\fprq2\fcharset204 Verdana;}{\f1\fswiss\fprq2\fcharset0 Verdana;}{\f2\froman\fprq2\fcharset2 Symbol;}{\f3\fmodern\fprq1\fcharset204 Courier New;}{\f4\fswiss\fprq2\fcharset204 Calibri;}{\f5\froman\fprq2\fcharset204 Times New Roman;}}
+{\colortbl ;\red0\green0\blue255;\red31\green73\blue125;\red54\green95\blue145;\red0\green0\blue0;\red79\green129\blue189;\red218\green238\blue243;}
+{\*\generator Riched20 10.0.14393}{\*\mmathPr\mnaryLim0\mdispDef1\mwrapIndent1440 }\viewkind4\uc1 
+\pard\widctlpar\sa120\qc\f0\fs36 SDK Dispatcher ReadMe\line\fs24 Part of Intel\'ae Media SDK 201\f1\lang1033 7\f0\lang1049\line and Intel\'ae Media Server Studio 2017\fs36\par
+
+\pard\widctlpar\sb120\sa120 {\fs20{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul Overview}}}}\f0\fs20\par
+{{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul SDK Implementation Registration}}}}\f0\fs20\par
+
+\pard\widctlpar\li360\sb120\sa120 {{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul Software SDK Implementations}}}}\f0\fs20\par
+{{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul Platform-Specific SDK Implementations}}}}\f0\fs20\par
+
+\pard\widctlpar\sb120\sa120 {{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul The Dispatching Procedure}}}}\f0\fs20\par
+
+\pard\widctlpar\sa120 {{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul Additional Recommendations}}}}\f0\fs20\par
+{{\field{\*\fldinst{HYPERLINK "\\l "}}{\fldrslt{\ul\cf1\cf1\ul Legal Information}}}}\f0\fs20\par
+\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \widctlpar\sa240\cf2\fs28 Overview\par
+
+\pard\widctlpar\sb120\sa120\cf0\fs20 This document describes the design of the SDK dispatcher.\par
+The dispatcher is a layer that lies between applications and SDK implementations. Upon initialization, the dispatcher locates the appropriate platform-specific SDK implementation. If there is none, it will select the software SDK implementation. The dispatcher will redirect subsequent function calls to the same functions in the selected SDK implementation.\par
+We recommend that applications always use the SDK functions through a dispatcher since platform-specific SDK implementations or software SDK implementations may have different names and reside in separate locations. The dispatching process represents a unique way to locate these SDK implementations.\par
+To maintain forward and backward compatibility, we do not recommend modifying the dispatcher in any way, except in the following cases:\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa120\f2\lang1033\'b7\tab\f0\lang1049 Debugging in the case that the dispatcher fails to locate an SDK implementation\par
+\f2\lang1033\'b7\tab\f0\lang1049 Compiling the dispatcher library with a compiler that the SDK does not support\par
+\f2\lang1033\'b7\tab\f0\lang1049 Rebuilding the dispatcher static library to be a dynamically linked library (DLL) for modular design\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa240\f2\lang1033\'b7\tab\f0\lang1049 Tailoring redirected function entries to those applications actually used for a smaller footprint\par
+
+\pard\widctlpar\li720\sb120\sa240\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \keepn\widctlpar\sb240\cf2\fs28 SDK Implementation Registration\par
+
+\pard\keepn\widctlpar\cf0\fs20\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \keepn\widctlpar\sa240\cf2\fs24 Software SDK Implementations\par
+
+\pard\widctlpar\sb120\sa240\cf0\fs20 Software SDK implementations reside in the application\rquote s local folder. The dispatcher locates software SDK implementations by their reserved names:\par
+\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2389\clcbpat6\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\cf2 Library\cell Software SDK Implementation\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2389\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\cf0\f3 libmfxsw32.dll\cell\f0 for IA-32 architecture\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2389\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\f3 libmfxsw64.dll\cell\f0 for Intel\super\'ae\nosupersub  64 architecture\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2389\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\f3 libmfxaudiosw32.dll\cell\f0 audio for IA-32 architecture\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2389\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\f3 libmfxaudiosw64.dll\cell\f0 audio for Intel\super\'ae\nosupersub  64 architecture\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\cellx2389\cellx7357 
+\pard\intbl\keepn\widctlpar\sb120\sa120\f3\cell\f0\cell\row 
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \keepn\widctlpar\sb240\sa240\cf2\fs24 Platform-Specific SDK Implementations\par
+
+\pard\widctlpar\sb120\sa240\cf0\fs20 The installer registers platform-specific SDK implementations in the system registry except for the following two reserved libraries:\par
+\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx2322\clcbpat6\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx7290 
+\pard\intbl\widctlpar\sb120\sa120\cf2 Library\cell Platform-Specific SDK Implementation\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2322\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx7290 
+\pard\intbl\widctlpar\sb120\sa120\cf0\f3 libmfxhw32.dll\cell\f0 Reserved hardware library for IA-32 architecture\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2322\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7290 
+\pard\intbl\widctlpar\sb120\sa120\f3 libmfxhw64.dll\cell\f0 Reserved hardware library for Intel\super\'ae\nosupersub  64 architecture\cell\row 
+\pard\widctlpar\sb240\sa240 The system registry contains information about platform-specific SDK implementations under the following registry keys:\par
+\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx3402\clcbpat6\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx7812 
+\pard\intbl\widctlpar\sb120\sa120\cf2 Registry Key\cell SDK Implementations for:\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx3402\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx7812 
+\pard\intbl\widctlpar\sb120\sa120\cf0\f3 HKEY_CURRENT_USER\\Software\\Intel\\MediaSDK\\Dispatch\cell\f0 Current user\cell\row\trowd\trgaph108\trleft-108\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx3402\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7812 
+\pard\intbl\widctlpar\sb120\sa120\f3 HKEY_LOCAL_MACHINE\\Software\\Intel\\MediaSDK\\Dispatch\cell\f0 Entire system\cell\row 
+\pard\widctlpar\sb240\sa240 Under each of these registry keys are descriptions of one or more SDK implementations. They are in the following structure in no particular order:\par
+\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\cf2 Key Structure\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\cf0\f3 LibraryName\b\f0\cell\b0\f3\ldblquote DeviceID\rdblquote =DWORD:0x87654321\par
+\ldblquote VendorID\rdblquote =DWORD:0x12345678\par
+\ldblquote Merit\rdblquote =DWORD:0x08012345\par
+\ldblquote Path\rdblquote =STRING:\rdblquote c:\\windows\\system32\\abc.dll\rdblquote\par
+\ldblquote APIVersion\rdblquote =DWORD:0x00000100\b\f0\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\keepn\widctlpar\sb120\sa120\cf2\b0 Key Description\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\cf0\f3 LibraryName\cell\f0 Library name; the dispatching process does not use this value.\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\f3 DeviceID\cell\f0 Device identifier for the graphic adapter\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\f3 VendorID\cell\f0 Vendor identifier for the graphic adapter\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\f3 Merit\cell\f0 Order in which the dispatching process should search through the list of available SDK implementations, with higher merit first; the Merit value must be less than 0x7fffffff. It is recommended that the merit of HW libraries be greater than 0x08000000.\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\f3 Path\cell\f0 Absolute path of the SDK implementation\cell\row\trowd\trgaph108\trleft-108\trqc\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx1980\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx7902 
+\pard\intbl\widctlpar\sb120\sa120\f3 APIVersion\cell\f0 The SDK API version=major*256+minor.\cell\row 
+\pard\keepn\widctlpar\sb120\sa120 Example 1 illustrates an example of registered SDK platform-specific implementations in the system registry:\par
+
+\pard\widctlpar\sb120\sa120\f3 [HKEY_LOCAL_MACHINE\\SOFTWARE\\Intel\\MediaSDK\\Dispatch\\HWLib01]\par
+"DeviceID"=dword:00002e22\par
+"VendorID"=dword:00008086\par
+"Merit"=dword:08000001\par
+"Path"="C:\\WINDOWS\\system32\\libmfxhw01.dll"\par
+\ldblquote APIVersion\rdblquote =dword:00000100\par
+[HKEY_LOCAL_MACHINE\\SOFTWARE\\Intel\\MediaSDK\\Dispatch\\HWLib02]\par
+"DeviceID"=dword:00002a42\par
+"VendorID"=dword:00008086\par
+"Merit"=dword:08000002\par
+"Path"="C:\\WINDOWS\\system32\\libmfxhw02.dll"\par
+\ldblquote APIVersion\rdblquote =dword:00000100\f0\par
+
+\pard\keepn\widctlpar\sb120\sa120\qc\f5{\pict{\*\picprop}\wmetafile8\picw13751\pich6204\picwgoal7796\pichgoal4432 
+0100090000038500000002001c00000000000400000003010800050000000b0200000000050000
+000c023807ab0c040000002e0118001c000000fb02a4ff0000000000009001000000cc04400022
+43616c6962726900000000000000000000000000000000000000000000000000040000002d0100
+00040000002d010000040000002d0100000400000002010100050000000902000000020d000000
+320a560000000100040000000000b20c3a0720003600050000000902000000021c000000fb0214
+00090000000000bc02000000cc0102022253797374656d00190100000000000000560000000000
+000000000000020d46eb040000002d010100040000002d010100030000000000
+}\f0\par
+
+\pard\widctlpar\sb120\sa240\qc\cf3\b\f4 Example 1: SDK Platform-Specific Implementations in the System Registry\par
+
+\pard\widctlpar\sb200\sa200\sl276\slmult1\cf0\b0\f0\page\par
+
+\pard\widctlpar\sb120\sa120\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \widctlpar\sb240\sa240\cf2\fs28 The Dispatching Procedure\par
+
+\pard\widctlpar\sb120\sa120\cf0\fs20 The following describes the dispatching procedure:\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa120 1.\tab Create a list of device and vendor identifiers for the display adaptor(s) to be scanned, according to the \b\f3 MFXInit\b0\f0  initialization parameter as follows:\par
+\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clcbpat6\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx2306\clcbpat6\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrb\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\cf2 MFXInit Initialization Parameter\cell Scan Procedure\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\cf0\f3 MFX_IMPL_AUDIO\cell\f0 Search for audio library (if defined). Works only in pair with \f3 MFX_IMPL_SOFTWARE\f0  parameter.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrt\brdrw10\brdrs\brdrcf5\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5\clbrdrt\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\f3 MFX_IMPL_SOFTWARE\cell\f0 Use \f3 DeviceId\f0 =0 and \f3 VendorId\f0 =0. Load software implementation.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb60\sa60\f3 MFX_IMPL_HARDWARE \cell 
+\pard\intbl\widctlpar\sb120\sa120\f0 Use the device and vendor identifiers for the default display adapter. Return error in case of specified acceleration interface initialization failed.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb60\sa60\f3 MFX_IMPL_AUTO\cell 
+\pard\intbl\widctlpar\sb120\sa120\f0 Use the device and vendor identifiers for the default display adapter. Load software implementation in case of specified acceleration interface initialization failed.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb60\sa60\f3 MFX_IMPL_HARDWARE2 or\par
+MFX_IMPL_HARDWARE3 or\par
+MFX_IMPL_HARDWARE4\cell 
+\pard\intbl\widctlpar\sb120\sa120\f0 Use the device and vendor identifiers for the second, third or fourth display adapter.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\f3 MFX_IMPL_HARDWARE_ANY\cell 
+\pard\intbl\widctlpar\sb60\sa60\f0 Scan all display adapters. Obtain device and vendor identifiers for them.  Return error if no acceleration interfaces available.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\f3 MFX_IMPL_AUTO_ANY\cell 
+\pard\intbl\widctlpar\sb60\sa60\f0 Scan all display adapters. Obtain device and vendor identifiers for them. Load software in case of no acceleration interface available.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\f3 MFX_IMPL_VIA_ANY\cell 
+\pard\intbl\widctlpar\sb60\sa60\f0 Acceleration interface specification (flag). Try all supported on given platform acceleration interfaces. Default value.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb60\sa60\f3 MFX_IMPL_VIA_D3D9\cell 
+\pard\intbl\widctlpar\sb120\sa120\f0 Acceleration interface specification (flag). Try only DirectX 9 interface.\cell\row\trowd\trgaph108\trleft-1150\trqc\trbrdrt\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrr\brdrw10\brdrs\brdrcf5 \cellx2306\clbrdrl\brdrw10\brdrs\brdrcf5 \cellx8110 
+\pard\intbl\widctlpar\sb120\sa120\f3 MFX_IMPL_VIA_D3D11\cell\f0 Acceleration interface specification (flag).  Try only DirectX 11 interface.\cell\row 
+\pard\widctlpar\li720\sb120\sa120\par
+\par
+\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa120 2.\tab Perform step 2 to step 3 for each set of device and vendor identifiers in the list.\par
+3.\tab Search the list of SDK implementations registered under \f3 HKEY_CURRENT_USER\\Software\\Intel\\MediaSDK\\Dispatch\f0  in the following manner:\par
+
+\pard\widctlpar\fi-360\li1440\sb120\sa120 a.\tab Filter out SDK implementations that do not match the device and vendor identifiers.\par
+b.\tab Filter out SDK implementations that do not meet the SDK API version requirement.\par
+c.\tab Search registered SDK implementations in order of their merit\emdash largest first:\par
+
+\pard\widctlpar\fi-180\li2160\sb120\sa120 i.\tab Load the SDK implementation.\par
+ii.\tab If the \b\f3 MFXInit\b0\f0  function of the SDK implementation returns successfully, the dispatcher has identified the correct SDK implementation. Terminate the dispatching process.\par
+iii.\tab Otherwise, unload the SDK implementation. Search the next SDK implementation in like manner.\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa120 4.\tab Search the list of SDK implementations registered under \f3 HKEY_LOCAL_MACHINE\\Software\\Intel\\MediaSDK\\Dispatch\f0  with the same steps listed in step 2.\par
+5.\tab Search the default \i platform-specific\i0  SDK implementation\emdash\f3 libmfxhw32.dll (libmfxaudiosw32.dll \f0 for audio\f3 )\f0  for 32-bit systems and \f3 libmfxhw64.dll (libmfxaudiosw64.dll \f0 for audio\f3 )\f0  for 64-bit systems\emdash in the following manner:\par
+
+\pard\widctlpar\fi-360\li1440\sb120\sa120 a.\tab Locate and load the SDK implementation through the system-default search path.\par
+b.\tab If the \b\f3 MFXInit\b0\f0  function of the SDK implementation returns successfully, then the dispatcher has identified the correct SDK implementation. Terminate the dispatching process.\par
+c.\tab Otherwise, Unload the SDK implementation.\par
+
+\pard\widctlpar\fi-360\li720\sb120\sa240 6.\tab Search the default SDK \i software\i0  implementation\emdash\f3 libmfxsw32.dll\f0  \f3 (libmfxaudiosw32.dll \f0 for audio\f3 )\f0  for 32-bit systems or \f3 libmfxsw64.dll (libmfxaudiosw64.dll \f0 for audio\f3 )\f0  for 64-bit systems\emdash with the same steps listed in step 4.\par
+
+\pard\widctlpar\li720\sb120\sa240\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \widctlpar\sb240\sa240\cf2\expndtw15\fs28 Additional Recommendations\fs20\par
+
+\pard\widctlpar\sb120\sa120\cf0\expndtw0 To ensure SDK API compatibility, unless applications \i explicitly\i0  specify a version of an SDK implementation, we recommend that a dispatcher always match the SDK API version, during session initialization (\b\f3 MFXInit)\b0\f0 , with the latest released SDK API version.\par
+
+\pard\widctlpar\sb120\sa240 Since Intel\super\'ae\nosupersub  Media SDK 2013 R2 the implementation specification flags are handled on the dispatcher level thus \f3 MFXQueryImpl\f0  will return bitmask specifying both implementation type and acceleration interface. The application should account for this if it builds with the new dispatcher, even if it uses the older SDK API versions where some of the flags were not declared yet. \par
+
+\pard\widctlpar\sb200\sa200\sl276\slmult1\page\par
+
+\pard\brdrt\brdrs\brdrw10\brsp20 \brdrb\brdrs\brdrw10\brsp20 \widctlpar\sb240\sa240\cf2\expndtw15\fs28 Legal Information\fs20\par
+
+\pard\widctlpar\sb120\sa120\cf4\expndtw0\fs18 INFORMATION IN THIS DOCUMENT IS PROVIDED IN CONNECTION WITH INTEL PRODUCTS. NO LICENSE, EXPRESS OR IMPLIED, BY ESTOPPEL OR OTHERWISE, TO ANY INTELLECTUAL PROPERTY RIGHTS IS GRANTED BY THIS DOCUMENT.\~ EXCEPT AS PROVIDED IN INTEL'S TERMS AND CONDITIONS OF SALE FOR SUCH PRODUCTS, INTEL ASSUMES NO LIABILITY WHATSOEVER AND INTEL DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTY, RELATING TO SALE AND/OR USE OF INTEL PRODUCTS INCLUDING LIABILITY OR WARRANTIES RELATING TO FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR INFRINGEMENT OF ANY PATENT, COPYRIGHT OR OTHER INTELLECTUAL PROPERTY RIGHT.\line\line UNLESS OTHERWISE AGREED IN WRITING BY INTEL, THE INTEL PRODUCTS ARE NOT DESIGNED NOR INTENDED FOR\i  \i0 ANY\i  \i0 APPLICATION IN WHICH THE FAILURE OF THE INTEL PRODUCT COULD CREATE A SITUATION WHERE PERSONAL INJURY OR DEATH MAY OCCUR.\line\line Intel may make changes to specifications and product descriptions at any time, without notice. Designers must not rely on the absence or characteristics of any features or instructions marked "reserved" or "undefined." Intel reserves these for future definition and shall have no responsibility whatsoever for conflicts or incompatibilities arising from future changes to them. The information here is subject to change without notice. Do not finalize a design with this information. \line\line The products described in this document may contain design defects or errors known as errata which may cause the product to deviate from published specifications. Current characterized errata are available on request. \line\line Contact your local Intel sales office or your distributor to obtain the latest specifications and before placing your product order. \line\line Copies of documents which have an order number and are referenced in this document, or other Intel literature, may be obtained by calling 1-800-548-4725, or by visiting {\cf0{\field{\*\fldinst{HYPERLINK "http://www.intel.com/"}}{\fldrslt{\ul\cf1\cf1\ul Intel's Web Site}}}}\f0\fs18 .\par
+\par
+\cf0 MPEG is an international standard for video compression/decompression promoted by ISO. Implementations of MPEG CODECs, or MPEG enabled platforms may require licenses from various entities, including Intel Corporation.\par
+\par
+Intel, the Intel logo, Intel Core, Intel 64, Intel HD Graphics, Intel Media Software Development Kit (Intel Media SDK) are trademarks or registered trademarks of Intel Corporation or its subsidiaries in the United States and other countries.\line\par
+
+\pard\widctlpar\sb120\sa60\b Optimization Notice\par
+
+\pard\widctlpar\sb120\sa120\b0 Intel's compilers may or may not optimize to the same degree for non-Intel microprocessors for optimizations that are not unique to Intel microprocessors. These optimizations include SSE2, SSE3, and SSE3 instruction sets and other optimizations. Intel does not guarantee the availability, functionality, or effectiveness of any optimization on microprocessors not manufactured by Intel.\~\line\line Microprocessor-dependent optimizations in this product are intended for use with Intel microprocessors. Certain optimizations not specific to Intel microarchitecture are reserved for Intel microprocessors. Please refer to the applicable product User and Reference Guides for more information regarding the specific instruction sets covered by this notice.\par
+\par
+
+\pard\widctlpar\sb120\sa120\qr Notice revision #20110804\par
+}
+ 
